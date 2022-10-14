@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/WorldlMap.unity
+    path: Assets/Scenes/TestWorldMap.unity
     guid: 0603c95ecc581af4fa43da517b7c9ecd
   - enabled: 1
     path: Assets/Scenes/Stage1.unity
