@@ -6,45 +6,56 @@ public class BroughtObject : MonoBehaviour
 {
     [SerializeField] GameObject _rHand = default;
     [SerializeField] GameObject _lHand = default;
-    GameObject _defaultParent = default;
+    FixedJoint _leftFJ = default;
+    FixedJoint _rightFJ = default;
+    Rigidbody _rb = default;
+    PlayerState _pState = default;
 
     private void Start()
     {
-        _defaultParent = transform.parent.gameObject;
+        _rb = GetComponent<Rigidbody>();
     }
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Player" && transform.parent.gameObject == _defaultParent)
+        if (other.gameObject.tag == "Player")
         {
-            if (Input.GetKey(KeyCode.E))
+            _pState = other.gameObject.GetComponent<PlayerState>();
+
+            if (_pState.pState.HasFlag(PlayerState.PlayerStatus.RGrab) && !_rightFJ)
             {
-                transform.SetParent(_rHand.transform);
+                _rightFJ = this.gameObject.AddComponent<FixedJoint>();
+                _rightFJ.connectedBody = _rHand.GetComponent<Rigidbody>();
+                _rb.Sleep();
+                gameObject.layer = LayerMask.NameToLayer("BroughtObjects");
             }
-            else if (Input.GetKey(KeyCode.Q))
+            else if (_pState.pState.HasFlag(PlayerState.PlayerStatus.LGrab) && !_leftFJ)
             {
-                transform.SetParent(_lHand.transform);
+                _leftFJ = this.gameObject.AddComponent<FixedJoint>();
+                _leftFJ.connectedBody = _lHand.GetComponent<Rigidbody>();
+                _rb.Sleep();
+                gameObject.layer = LayerMask.NameToLayer("BroughtObjects");
             }
         }
     }
 
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.E))
+        if (_pState)
         {
-            if (transform.parent.gameObject == _rHand)
+            if (!_pState.pState.HasFlag(PlayerState.PlayerStatus.RGrab) && _rightFJ)
             {
-                transform.SetParent(_defaultParent.transform);
+                _rb.WakeUp();
+                Destroy(_rightFJ);
+                gameObject.layer = LayerMask.NameToLayer("Default");
             }
-        }
-        else if (Input.GetKeyUp(KeyCode.Q))
-        {
-            if (transform.parent.gameObject == _lHand)
+
+            if (!_pState.pState.HasFlag(PlayerState.PlayerStatus.LGrab) && _leftFJ)
             {
-                transform.SetParent(_defaultParent.transform);
+                _rb.WakeUp();
+                Destroy(_leftFJ);
+                gameObject.layer = LayerMask.NameToLayer("Default");
             }
+
         }
-
-
-
     }
 }
