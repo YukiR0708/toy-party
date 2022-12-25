@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
+/// <summary> Playerの移動・ジャンプを制御するクラス </summary>
 public class PlayerMove : MonoBehaviour
 {
 
     PlayerState _pState = default;
-    //*****移動＆ジャンプ関連*****
     Rigidbody _playerRb = default;
     Animator _playerAnim = default;
     [SerializeField, Header("移動スピード")] float _speed = default;
@@ -52,8 +51,9 @@ public class PlayerMove : MonoBehaviour
                 _pState.pState &= ~PlayerState.PlayerStatus.Move;
             }
 
-            Quaternion playerRot = Camera.main.transform.rotation;
-            playerRot.x = 0;
+            //***回転***
+            Quaternion playerRot = Camera.main.transform.rotation;  //カメラの回転に合わせて回転する
+            playerRot.x = 0;    //y軸だけで回転するようにする
             playerRot.z = 0;
             transform.rotation = Quaternion.Slerp(transform.rotation, playerRot, 1.0f); // カメラの正面を向く
             _playerRb.AddForce(playerDir);

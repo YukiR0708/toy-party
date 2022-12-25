@@ -1,20 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary> Playerが物をつかむ動きを制御するクラス </summary>
 public class PlayerGrab : MonoBehaviour
 {
     Animator _playerAnim = default;
     PlayerState _pState = default;
 
-    //*****腕の動き（IK）関連*****
+    //*****関連*****
     [Header("腕を動かすスピード"), SerializeField, Range(0f, 0.05f)] float _upDownSpeed = 0;
     //***右手***
-    [Header("右手用の空オブジェクト"), SerializeField] Transform _rightHandTarget = default;
+    [Header("右手用の移動先"), SerializeField] Transform _rightHandTarget = default;
     [Header("右手のPositionに対するウェイト")] float _rightPositionWeight = 0;
     [Header("右手のRotationに対するウェイト")] float _rightRotationWeight = 0;
     //***左手***
-    [Header("左手用の空オブジェクト"), SerializeField] Transform _leftHandTarget = default;
+    [Header("左手用の移動先"), SerializeField] Transform _leftHandTarget = default;
     [Header("左手のPositionに対するウェイト")] float _leftPositionWeight = 0;
     [Header("左手のRotationに対するウェイト")] float _leftRotationWeight = 0;
 
